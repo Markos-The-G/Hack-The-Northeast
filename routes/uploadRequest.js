@@ -34,7 +34,7 @@ const uploadFile = async (buffer) => {
                 console.error(err);
             } else {
                 const HASH = await res[0].hash;
-                resolve(hash);
+                resolve(HASH);
             }
         })
     })
@@ -42,44 +42,70 @@ const uploadFile = async (buffer) => {
 
 const uploadRequest = async (user, name, description, requirements, bufferTrainingData, bufferModel) => {
     const IPFS_HASH = await Contract.get();
-    console.log(IPFS_HASH);
+
+    bufferTrainingData = Buffer.from(bufferTrainingData);
+    bufferModel = Buffer.from(bufferModel);
+
     if (IPFS_HASH == "QmbJWAESqCsf4RFCqEY7jecCashj8usXiyDNfKtZCwwzGb") { // Empty File
-        console.log("orig")
         let OBJ = {};
-        uploadFile(bufferTrainingData).then(trainingDataHash => {
 
-            uploadFile(bufferModel).then(modelHash => {
-                OBJ[user] = {
-                    name,
-                    description,
-                    requirements,
-                    trainingData: trainingDataHash,
-                    model: modelHash
-                }
+        return new Promise( async (resolve, reject) => {
+            const trainingDataHash = await uploadFile(bufferTrainingData);
+            const modelHash = await uploadFile(bufferModel);
 
-                let buffer = Buffer.from(JSON.stringify(OBJ));
+            OBJ[user] = {  };
+            OBJ[user][name] = {
+                name,
+                description,
+                requirements,
+                trainingDataHash,
+                modelHash
+            };
+            
+            let buffer = Buffer.from(JSON.stringify(OBJ));
 
-                return new Promise((resolve, reject) => {
-                    ipfs.files.add(buffer, async (err, res) => {
-                        if (err) {
-                            console.error(err);
-                        } else {
-                            const hash = await res[0].hash;
-                            await Contract.set(hash);
-
-                            resolve(res);
-                        }
-                    })
-                })
-
-            })
+            const HASH = await uploadFile(buffer);
+            await Contract.set(HASH);
+            resolve(HASH);
 
         })
 
     } else {
-        const MDB = await get(IPFS_HASH);
 
-        uploadFile(bufferTrainingData)
+        return new Promise( async (resolve, reject) => {
+            const MDB = await get(IPFS_HASH);
+            const trainingDataHash = await uploadFile(bufferTrainingData);
+            const modelHash = await uploadFile(bufferModel);
+
+            if (MDB[user]) {
+                MDB[user][name] = {
+                    name,
+                    description,
+                    requirements,
+                    trainingDataHash,
+                    modelHash  
+                    
+                };
+                
+            } else {
+                MDB[user] = {  };
+                MDB[user][name] = {
+                    name,
+                    description,
+                    requirements,
+                    trainingDataHash,
+                    modelHash   
+                };
+                
+            }
+
+            let buffer = Buffer.from(JSON.stringify(MDB));
+
+            const HASH = await uploadFile(buffer);
+            await Contract.set(HASH);
+
+            resolve(HASH);
+        })
 
     }
 
@@ -93,8 +119,8 @@ router.post('/', async function (req, res, next) {
     const BUFFER_TRAINING_DATA = req.body.trainingdata;
     const BUFFER_MODEL = req.body.model;
 
-    uploadRequest(USER_HASH, NAME, DESCRIPTION, REQUIREMENTS, BUFFER_TRAINING_DATA, BUFFER_MODEL).then(hash => {
-        res.send(`${hash}`);
+    uploadRequest(USER_HASH, NAME, DESCRIPTION, REQUIREMENTS, BUFFER_TRAINING_DATA, BUFFER_MODEL).then(HASH => {
+        res.send(HASH);
     })
 
 })

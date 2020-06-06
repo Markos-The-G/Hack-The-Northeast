@@ -12,7 +12,8 @@ class CreateBounty extends Component {
             description: "",
             requirements: ""
         }
-        this.fileInputRef = React.createRef();
+        this.fileInputRef1 = React.createRef();
+        this.fileInputRef2 = React.createRef();
     }
 
     clearFile = () => {
@@ -25,9 +26,14 @@ class CreateBounty extends Component {
         })
     }
 
-    openFileDialog = () => {
+    openFileDialog1 = () => {
         if (this.props.disabled) return;
-        this.fileInputRef.current.click();
+        this.fileInputRef1.current.click();
+    }
+
+    openFileDialog2 = () => {
+        if (this.props.disabled) return;
+        this.fileInputRef2.current.click();
     }
 
     onTrainingDataAdded = (e) => {
@@ -95,16 +101,30 @@ class CreateBounty extends Component {
         return (
             <div className="create-bounty-page">
                 <div className="container">
-                    {this.state.bufferModel == null && this.state.bufferTrainingData == null ? 
-                    <div className="drop-zone" onClick={this.openFileDialog} style={{ cursor: this.props.disabled ? "default" : "pointer" }}>
-                        <input 
-                            ref={this.fileInputRef}
-                            className="file-input"
-                            type="file"
-                            onChange={this.onTrainingDataAdded}
-                        />
-                        <span className="message"> Upload Files </span>
+                    {(this.state.bufferModel == null || this.state.bufferTrainingData == null) ? 
+                    <div>
+                        <div className="drop-zone" onClick={this.openFileDialog} style={{ cursor: this.props.disabled ? "default" : "pointer" }}>
+                            <input 
+                                ref={this.fileInputRef1}
+                                className="file-input"
+                                type="file"
+                                onChange={this.onTrainingDataAdded}
+                            />
+                            <span className="message"> Upload Files </span>
+                        </div>  
+                        <div className="drop-zone" onClick={this.openFileDialog} style={{ cursor: this.props.disabled ? "default" : "pointer" }}>
+                            <input 
+                                ref={this.fileInputRef2}
+                                className="file-input"
+                                type="file"
+                                onChange={this.onTrainingDataAdded}
+                            />
+                            <span className="message"> Upload Files this.onTrainingDataAdded </span>
+                        </div>
+                        <button onClick={() => {console.log(this.state)}}> CLICK TO VIEW STATE </button>
                     </div>
+
+                    
 
                     :
                     <form className="upload-form" onSubmit={this.onSubmit}>

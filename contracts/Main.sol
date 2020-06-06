@@ -3,8 +3,8 @@ pragma experimental ABIEncoderV2;
 
 contract Main {
     
-    address payable initialCreator; 
-    constructor() public {
+    address initialCreator; 
+    constructor() payable public {
         initialCreator = msg.sender;
     }
     
@@ -39,7 +39,7 @@ contract Main {
     mapping(address => bounty) bountyHashTable;
     address payable[] bountyAddresses;
     
-    bool bountyTracker;
+    bool bountyTracker = true;
     function resetBountyTracker() private {
         bountyTracker = true;
     }
@@ -59,13 +59,14 @@ contract Main {
             bountyHashTable[_address].name = _name;
             bountyHashTable[_address].requirement = _requirement;
             bountyHashTable[_address].bountyAmount = _bountyAmount;
+            bountyAddresses.push(_address);
         } else {
-            resetBountyTracker;
+            resetBountyTracker();
         }
     }
     
     //Helper function and bool. No endpoint *****
-    bool submissionTracker;
+    bool submissionTracker = true;
     function resetSubmissionTracker() private {
         submissionTracker = true;
     }
@@ -82,7 +83,7 @@ contract Main {
         
         if (submissionTracker == true) {
             require (msg.sender == initialCreator);
-            submission storage sub;
+            submission memory sub;
             sub.submitter = _submitter;
             sub.accuracy = _accuracy;
             bountyHashTable[_address].submissions.push(sub);
@@ -103,12 +104,13 @@ contract Main {
         require (msg.sender == initialCreator);
         payment(_submitter, _amount);
         bountyHashTable[_address].bountyAmount = bountyHashTable[_address].bountyAmount - _amount;
+        return true;
     }
     
     //This completes the full payment with only submitter and bounty maker address, then deletes the bounty
     function fullPayment(address payable _submitter, address payable _address) public payable returns (bool){
         require (msg.sender == initialCreator);
-        require (address(this).balance > bountyHashTable[_address].bountyAmount);
+        require (address(this).balance >= bountyHashTable[_address].bountyAmount);
         _submitter.transfer(bountyHashTable[_address].bountyAmount);
         bountyHashTable[_address].bountyAmount = 0;
         bountyHashTable[_address].name = "";
@@ -121,6 +123,7 @@ contract Main {
                 break;
             }
         }
+        return true;
     }
     
     //Helper function and array, do not make endpoint, used in the main function of retrieving bounties
@@ -128,14 +131,17 @@ contract Main {
     function returnTempBountyArray() public view returns (bounty[] memory) {
         return tempBountyArray;
     }
+
+    function deleteTempBountyArray() public {
+        delete tempBountyArray;
+    }
     
     //Main retriever function, returns results then clears it too - this is obv an endpoint -- also, this technically returns all submissions for all given bounties
     function retreieveTempBountyArray() public {
         for (uint256 j = 0; j < bountyAddresses.length; j++) {
             tempBountyArray.push(bountyHashTable[bountyAddresses[j]]);
         }
-        returnTempBountyArray;
-        delete tempBountyArray;
+        returnTempBountyArray();
     }
     
     //This is a helper function and array - do not pay attention or endpoint
@@ -143,18 +149,20 @@ contract Main {
     function returnTempSubmissionArray() public view returns (submission[] memory) {
         return tempSubmissionArray;
     }
+    function deleteTempSubmissionArray() public {
+        delete tempSubmissionArray;
+    }
     
     //This function for endpoint finds all the submissions for any given address and returns an array of it including their accuracy and the name of the bounty 
     function retrieveTempSubmissionArray(address _submitter) public {
         for (uint256 p = 0; p < bountyAddresses.length; p++) {
             for (uint256 u = 0; u < bountyHashTable[bountyAddresses[p]].submissions.length; u++) {
-                if ( bountyHashTable[bountyAddresses[p]].submissions[u].submitter == _submitter) {
+                if (bountyHashTable[bountyAddresses[p]].submissions[u].submitter == _submitter) {
                     tempSubmissionArray.push( bountyHashTable[bountyAddresses[p]].submissions[u]);
                 }
             }
         }
-        returnTempSubmissionArray;
-        delete tempSubmissionArray;
+        returnTempSubmissionArray();
     }
     
 }
