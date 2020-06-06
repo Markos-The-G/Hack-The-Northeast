@@ -1,0 +1,93 @@
+.navbar-div{
+    box-shadow: 0px 0px 5px #E5E9F2;
+    height: inherit;
+    background: #FFFFFF;
+}
+
+.navbar-inner-div{
+    width: 240px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-div{
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: 'Work Sans', sans-serif;
+    font-size: 21px;
+    line-height: 25px;
+    color: #748AA1;
+}
+
+.navlinks-holder{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navlinks-container{
+    padding: 0px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 100px; /*to account for height of profile-div to make it center of the navbar*/
+}
+
+.navbar-link{
+    font-family: 'Work Sans', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 27px;
+    letter-spacing: -0.758333px;
+    color: #B8C5D3;
+    list-style: none;
+    text-decoration: none;
+
+    height: 70px;
+    width: inherit;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-profile-picture{
+    width: 40px;
+    height: 40px;
+    background: #d8d8d8;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+
+.navbar-profile-name{
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 300px;
+    font-size: 21px;
+
+}
+
+.active{
+    width: 275px;
+    background: #ffa538;
+    box-shadow: 0px 5px 15px #ACB2C1;
+    border-radius: 5px;
+    color: white;
+    transition: 0.25s linear all;
+}
+
+@media only screen and (max-width: 1330px) {
+    .navbar-inner-div{
+        width: 200px;
+    }
+    .active{
+        width: 225px;
+    }
+  }
