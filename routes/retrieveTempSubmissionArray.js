@@ -27,19 +27,6 @@ const get = async hash => {
     }
 }
 
-const uploadFile = async (buffer) => {
-    return new Promise((resolve, reject) => {
-        ipfs.files.add(buffer, async (err, res) => {
-            if (err) {
-                console.error(err);
-            } else {
-                const HASH = await res[0].hash;
-                resolve(HASH);
-            }
-        })
-    })
-}
-
 const getAllBounty = async (user) => {
     const IPFS_HASH = await Contract.get();
 
@@ -66,12 +53,52 @@ const getAllBounty = async (user) => {
 router.post('/', async function (req, res, next) {
     const USER_ADDRESS = req.body.userhash;
 
-    
+    await Contract.retrieveTempSubmissionArray(USER_ADDRESS);
+    Contract.returnTempSubmissionArray().then(async userInfo => {
 
-    Contract.retrieveTempSubmissionArray(USER_ADDRESS).then(BOUNTIES => {
-        res.send(BOUNTIES);
+        const LIST = [  ];
+
+        userInfo.forEach(subDoc => {
+            // [
+            //     '0x5745975468AEd4Fd4f8932fD768EA3c6A3F0898c',
+            //     BigNumber { _hex: '0x50' },
+            //     'Detecting COVID-19',
+            //     submitter: '0x5745975468AEd4Fd4f8932fD768EA3c6A3F0898c',
+            //     accuracy: BigNumber { _hex: '0x50' },
+            //     bountyName: 'Detecting COVID-19'
+            // ],
+            // [
+            //     '0x5745975468AEd4Fd4f8932fD768EA3c6A3F0898c',
+            //     BigNumber { _hex: '0x50' },
+            //     'Detecting COVID-19',
+            //     submitter: '0x5745975468AEd4Fd4f8932fD768EA3c6A3F0898c',
+            //     accuracy: BigNumber { _hex: '0x50' },
+            //     bountyName: 'Detecting COVID-19'
+            // ]
+            const bountyName = subDoc.bountyName;
+            let accuracy = subDoc.accuracy;
+            accuracy = parseInt("0x50", 16);
+
+            LIST.push(
+                [
+                    bountyName, accuracy
+                ]
+            )
+
+            // [0] is bountyName, [1] is accuracy
+        })
+
+        Contract.deleteTempSubmissionArray();
+        res.send(LIST); //3 values (address, accuracy, name of bounty) all seperated by 1 comma (string). Do with the results as you wish before you send it ....
+        
     })
 
 })
 
+// router.post('/test', async function (req, res, next) {
+//     await Contract.addNewBounty(req.body.address, req.body.name, req.body.requirement, req.body.amount)
+//     res.send('success');
+// })
+
+//
 module.exports = router;

@@ -3,7 +3,6 @@ import getWeb3 from "./getWeb3";
 import { ethers } from 'ethers';
 import {BrowserRouter, Route, Switch} from "react-router-dom"
 
-
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar.js"
 import CreateBounty from "./pages/CreateBounty/CreateBounty.js"
@@ -99,7 +98,7 @@ class App extends Component {
                 <Analytics/>
               </Route>
               <Route path="/create-bounty">
-                <CreateBounty/>
+                <CreateBounty account={this.state.account}/>
               </Route>
               <Route path="/find-bounty">
                 <FindBounty/>

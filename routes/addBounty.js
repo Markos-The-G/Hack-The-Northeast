@@ -111,6 +111,15 @@ const uploadRequest = async (user, name, description, requirements, bufferTraini
 
 }
 
+const checkUser = (activeBounties, user) => {
+    const idx = activeBounties.indexOf(user);
+    if (idx > -1) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 router.post('/', async function (req, res, next) {
     const USER_HASH = req.body.userhash;
     const NAME = req.body.name;
@@ -118,12 +127,18 @@ router.post('/', async function (req, res, next) {
     const REQUIREMENTS = req.body.requirements;
     const BUFFER_TRAINING_DATA = req.body.trainingdata;
     const BUFFER_MODEL = req.body.model;
+    const AMOUNT = req.body.amount;
+    const ACTIVE_BOUNTIES = await Contract.returnBountyAddresses();
 
-    uploadRequest(USER_HASH, NAME, DESCRIPTION, REQUIREMENTS, BUFFER_TRAINING_DATA, BUFFER_MODEL).then(HASH => {
-        res.send(HASH);
-    })
-
-    
+    const userStatus = checkUser(ACTIVE_BOUNTIES, USER_HASH);
+    if (userStatus) {
+        uploadRequest(USER_HASH, NAME, DESCRIPTION, REQUIREMENTS, BUFFER_TRAINING_DATA, BUFFER_MODEL).then(async HASH => {
+            await Contract.addNewBounty(USER_HASH, NAME, REQUIREMENTS.accuracy, AMOUNT);
+            res.send('success');
+        })
+    } else {
+        res.send('unauthorized');
+    }
 
 })
 

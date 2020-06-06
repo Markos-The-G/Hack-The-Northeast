@@ -53,6 +53,7 @@ router.post('/', async function (req, res, next) {
     getAllBounty(USER_ADDRESS).then(BOUNTIES => {
         res.send(BOUNTIES);
     })
+    
 
 })
 

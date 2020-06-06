@@ -22,11 +22,14 @@ contract Main {
   function () external payable {
 
   }
+
+    
     
     //These are just defining data stuff... *******
     struct submission {
         address payable submitter;
         uint256 accuracy;
+        string bountyName;
     }
     
     struct bounty {
@@ -45,12 +48,14 @@ contract Main {
     }
     // ****************
     
-    
+    function returnBountyAddresses() public view returns (address payable[] memory) {
+        return bountyAddresses;
+    }
     //First main function, add a new bounty (in this contract i refer to _address as the bounty creator, _submitter as a test case submitter)
     function addNewBounty(address payable _address, string memory _name, uint256 _requirement, uint256 _bountyAmount) public {
         for (uint256 i = 0; i < bountyAddresses.length; i++) { 
             if (bountyAddresses[i] == _address) {
-                bountyTracker == false;
+                bountyTracker = false;
                 break;
             }
         }
@@ -86,6 +91,7 @@ contract Main {
             submission memory sub;
             sub.submitter = _submitter;
             sub.accuracy = _accuracy;
+            sub.bountyName = bountyHashTable[_address].name;
             bountyHashTable[_address].submissions.push(sub);
         } else {
             resetSubmissionTracker();

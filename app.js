@@ -3,12 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var getRouter = require('./routes/get');
 var setRouter = require('./routes/set');
-var uploadRequestRouter = require('./routes/uploadRequest');
+var addBountyRouter = require('./routes/addBounty');
+var retrieveTempSubmissionArrayRouter = require('./routes/retrieveTempSubmissionArray');
+var addSubmissionRouter = require('./routes/addSubmission');
 
 var app = express();
 
@@ -21,12 +24,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/get', getRouter);
 app.use('/set', setRouter);
-app.use('/uploadRequest', uploadRequestRouter);
+app.use('/addBounty', addBountyRouter);
+app.use('/retrieveTempSubmissionArray', retrieveTempSubmissionArrayRouter);
+app.use('/addSubmission', addSubmissionRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
