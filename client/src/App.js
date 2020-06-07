@@ -87,7 +87,13 @@ class App extends Component {
 
   render() {
     if (!this.state.account) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+      return (
+        <div style={{width: "100vw", height : "100vh", display : "flex", justifyContent : "center", alignItems : "center", flexDirection : "column"}}>
+          {/* https://bountai-logo.adityakeerthi.repl.co/BountAI.png */}
+          <img src={"https://bountai-logo.adityakeerthi.repl.co/BountAI.png"} width="300"></img>
+          <div style={{fontFamily : "'Work Sans', sans-serif", fontSize : "25px"}}>Please Log In With MetaMask</div>
+        </div>
+      );
     }
     return (
       <div className="App">

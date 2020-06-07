@@ -59,22 +59,7 @@ router.post('/', async function (req, res, next) {
         const LIST = [  ];
 
         userInfo.forEach(subDoc => {
-            // [
-            //     '0x5745975468AEd4Fd4f8932fD768EA3c6A3F0898c',
-            //     BigNumber { _hex: '0x50' },
-            //     'Detecting COVID-19',
-            //     submitter: '0x5745975468AEd4Fd4f8932fD768EA3c6A3F0898c',
-            //     accuracy: BigNumber { _hex: '0x50' },
-            //     bountyName: 'Detecting COVID-19'
-            // ],
-            // [
-            //     '0x5745975468AEd4Fd4f8932fD768EA3c6A3F0898c',
-            //     BigNumber { _hex: '0x50' },
-            //     'Detecting COVID-19',
-            //     submitter: '0x5745975468AEd4Fd4f8932fD768EA3c6A3F0898c',
-            //     accuracy: BigNumber { _hex: '0x50' },
-            //     bountyName: 'Detecting COVID-19'
-            // ]
+
             const bountyName = subDoc.bountyName;
             let accuracy = subDoc.accuracy;
             accuracy = parseInt("0x50", 16);

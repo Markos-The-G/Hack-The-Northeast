@@ -40,7 +40,7 @@ class Dashboard extends Component {
             <div className="dashboard-div">
                 <div className="dashboard-title">Dashboard</div>
                 <div className="dashboard-content-div">
-                    <DashboardCard/>
+                    <DashboardCard  />
        
 
                 </div>

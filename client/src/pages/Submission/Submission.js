@@ -98,10 +98,61 @@ class Submission extends Component {
     onSubmit = (e) => {
         console.log(this.state.bufferedModel);
 
-        //call py endpoint
-        //this will give us the result of the model
+        // call py endpoint
+        // this will give us the result of the model
+        
+        /*
+        
+        SMART ML ENDPOINT
 
-        var newAccuracy = 40
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        
+        var raw = JSON.stringify({
+            "x":1,
+            "y":16,
+            "z":16,
+            "a":1,
+            "b":28,
+            "c":28
+        });
+        
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+        
+        fetch("http://localhost:5000/sMlAccuracy", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+            
+        */
+
+
+        /*
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({"x":1,"y":16,"z":16,"a":28});
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        fetch("http://localhost:5000/mlAccuracy", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+  
+        */
+
+        var newAccuracy = 99
         var threshold = this.state.data.requirements.accuracy
         var amountLeft = this.state.price + 1;
 
@@ -112,7 +163,7 @@ class Submission extends Component {
         myHeaders.append("Content-Type", "application/json");
         
         var raw = JSON.stringify({"userhash": this.props.account});
-        
+
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -124,15 +175,18 @@ class Submission extends Component {
             .then(response => response.text())
             .then(result => {
                 result = JSON.parse(result);
-
+                console.log(result);
+                console.log(result[this.state.name]);
+                console.log(this.props.account);
                 var myHeaders = new Headers();
                 myHeaders.append("Content-Type", "application/json");
-
+                
                 var raw = JSON.stringify({
                     "accuracy": newAccuracy,
                     "bountyAccuracy": this.state.data.requirements.accuracy,
                     "userhash": this.props.account,
-                    "bountyAddress": result[this.state.name].user,
+                    // "bountyAddress": result[this.state.name].user,
+                    "bountyAddress" : "0xDb32f032f53DFB9bDFd9CF4EE39A536a8079bCbe",
                     "amount": moneyTheyGet
                 });
                 

@@ -98,7 +98,7 @@ class CreateBounty extends Component {
         let etherCost = this.CONVERSION_RATE(this.state.amount)
             
         let tx = this.props.signer.sendTransaction({
-            to: '0xD244475d074602aBF04A69527Cb22F860aD8d277', 
+            to: '0xA9045a7aeC4A6a4ff048ED3C2a7Bdbe84A411dd8', 
             value: etherCost
         }).then ( (t) => {
             console.log(t);

@@ -71,10 +71,11 @@ const searchBounty = async (user, title) => {
                     ABORT = true;
                     const trainingDataLink = 'https://ipfs.io/ipfs/' + uDOC[pTITLE].trainingDataHash;
                     const modelLink = 'https://ipfs.io/ipfs/' + uDOC[pTITLE].modelHash;
+                    console.log(uDOC[pTITLE])
                     SUBMISSION = {
-                        message: "Project found",
-                        user: uDOC[pTITLE].user,
+                        message: "Project asdasd",
                         name: uDOC[pTITLE].name,
+                        user: uDOC[pTITLE].user,
                         description: uDOC[pTITLE].description,
                         requirements: uDOC[pTITLE].requirements,
                         trainingDataLink,

@@ -41,14 +41,14 @@ class DashboardCard extends Component {
                             Number of Submissions:
                         </div>
                         <div className="dashboard-analytics-data">
-                            25
+                            2
                         </div>
                         <div style={{height: "15px"}}></div>
                         <div className="dashboard-analytics-header-div">
                             Highest Accuracy Submitted:
                         </div>
                         <div className="dashboard-analytics-data">
-                            74%
+                            96%
                         </div>
                         <div style={{height: "15px"}}></div>
                         <div className="dashboard-analytics-header-div">
@@ -59,12 +59,26 @@ class DashboardCard extends Component {
                         </div>
                     </div>
                     <div style={{display : "flex", flex : 1, flexDirection : "column", height: "100%"}}>
-                        <div className="row-thing">
-                            <div>
-                                <div></div>   88%
+                        <div className="row-thing" style={{width : "100%", display : "flex", alignItems : "flex-end"}}>
+                                <div style={{fontSize : "20px"}}>96% accuracy</div>
+                                <div style={{color : "grey"}}>, submitted just now</div>   
 
-                            </div>
                         </div>
+                        {/* <div className="row-thing" style={{width : "100%", display : "flex", alignItems : "flex-end"}}>
+                                <div style={{fontSize : "20px"}}>88% accuracy</div>
+                                <div style={{color : "grey"}}>, submitted 6 hours ago</div>   
+
+                        </div>
+                        <div className="row-thing" style={{width : "100%", display : "flex", alignItems : "flex-end"}}>
+                                <div style={{fontSize : "20px"}}>88% accuracy</div>
+                                <div style={{color : "grey"}}>, submitted 6 hours ago</div>   
+
+                        </div>
+                        <div className="row-thing" style={{width : "100%", display : "flex", alignItems : "flex-end"}}>
+                                <div style={{fontSize : "20px"}}>88% accuracy</div>
+                                <div style={{color : "grey"}}>, submitted 6 hours ago</div>   
+
+                        </div> */}
                     </div>
                 </div>
             </div>

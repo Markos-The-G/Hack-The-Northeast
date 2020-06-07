@@ -34,13 +34,25 @@ let Contract = new ethers.Contract(address, abi, customHttpProvider.getSigner(0)
 
 //         await Contract.deleteTempSubmissionArray();
 //         res.send(LIST); //3 values (address, accuracy, name of bounty) all seperated by 1 comma (string). Do with the results as you wish before you send it ....
-        
+
 //     })
 
 // })
 
-router.post('/', (req, res, next) => {
+
+router.post('/', async (req, res, next) => {
+    const USER_ADDRESS = req.body.userhash;
+
+    // await Contract.deleteTempSubmissionArray();
+    const ADDRESS_LIST = await Contract.returnBountyAddresses();
+
     await Contract.statistics(USER_ADDRESS);
+    const SUBMISSION_ARRAY = await Contract.returnTempSubmissionArray();
+
+    // 0x5f6deEf5aD5543098169c08486cdDBFE9b9D24bb
+    await Contract.deleteTempSubmissionArray();
+    res.send(SUBMISSION_ARRAY);
+
 })
 
 module.exports = router;
