@@ -83,9 +83,8 @@ router.post('/', async function (req, res, next) {
     const USER_ADDRESS = req.body.userhash;
     const NAME = req.body.name;
 
-    searchBounty(USER_ADDRESS, NAME).then(SUBMISSION => {
-        res.send(SUBMISSION);
-    })
+    const SUBMISSION = await searchBounty(USER_ADDRESS, NAME);
+    res.send(SUBMISSION);
 
 })
 

@@ -31,6 +31,18 @@ class FindBounty extends Component {
         .then(response => response.text())
         .then(result => {
             this.setState({data : JSON.parse(result), loading : false})
+
+
+
+
+
+
+
+
+
+
+
+
         })
         .catch(error => console.log('error', error));
     }
@@ -54,7 +66,7 @@ class FindBounty extends Component {
                      {
                         this.state.loading 
                         ?
-                        <CircularProgress/>
+                        <CircularProgress style={{marginTop : "50px"}}/>
                         :
                         Object.keys(this.state.data).map((key, index) => ( 
                             <BountyCard data={this.state.data[key]} title={this.state.data[key].name} description={this.state.data[key].description} />

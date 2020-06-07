@@ -60,7 +60,9 @@ const uploadRequest = async (user, name, description, requirements, bufferTraini
                 description,
                 requirements,
                 trainingDataHash,
-                modelHash
+                modelHash,
+                paid: false
+
             };
             
             let buffer = Buffer.from(JSON.stringify(OBJ));
@@ -85,7 +87,8 @@ const uploadRequest = async (user, name, description, requirements, bufferTraini
                     description,
                     requirements,
                     trainingDataHash,
-                    modelHash  
+                    modelHash,
+                    paid: false
                     
                 };
                 
@@ -97,7 +100,8 @@ const uploadRequest = async (user, name, description, requirements, bufferTraini
                     description,
                     requirements,
                     trainingDataHash,
-                    modelHash   
+                    modelHash,
+                    paid: false
                 };
                 
             }

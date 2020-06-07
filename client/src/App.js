@@ -105,7 +105,11 @@ class App extends Component {
               <Route path="/create-bounty">
                 <CreateBounty account={this.state.account}/>
               </Route>
-              <Route path="/find-bounty/:hash" component={Submission}>
+              {/* <Route path="/find-bounty/:hash" component={Submission}>
+              </Route> */}
+              <Route path="/find-bounty/:hash" render={(routeProps) => {
+                return (<Submission hash={routeProps.match.params.hash} account={this.state.account}/>)
+              }}>
               </Route>
               <Route path="/find-bounty">
                 <FindBounty/>
