@@ -4,6 +4,7 @@ import "./CreateBounty.css"
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import { ethers, utils } from 'ethers';
 
 class CreateBounty extends Component {
     constructor(props) {
@@ -73,11 +74,41 @@ class CreateBounty extends Component {
 
     onSubmit = (e) => {
         e.preventDefault();
+
+
+            
+        let etherCost = this.CONVERSION_RATE(this.state.amount)
+            
+        let tx = this.props.signer.sendTransaction({
+            to: '0xa3f150De117A8FCb51A57206FEf47FA5dE78cF5f', 
+            value: etherCost
+        }).then ( (t) => {
+            console.log(t);
+        })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         
         var raw = JSON.stringify({
-            "userhash": this.props.account,
+            "userhash": "0x5f6deEf5aD5543098169c08486cdDBFE9b9D24bb",
             "name": this.state.name,
             "description": this.state.description,
             "requirements":{
@@ -95,10 +126,14 @@ class CreateBounty extends Component {
             redirect: 'follow'
         };
         
+        
         fetch("http://localhost:3005/addBounty", requestOptions)
             .then(response => response.text())
             .then(result => {
                 console.log("DONE");
+                
+            
+  
             })
             .catch(error => console.log('error', error));
     }

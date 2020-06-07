@@ -3,6 +3,7 @@ const IPFS = require('ipfs-api');
 const axios = require('axios');
 const ethers = require('ethers');
 const { abi, address } = require('../contract');
+var cors = require('cors')
 
 const URL = 'HTTP://127.0.0.1:7545';
 const customHttpProvider = new ethers.providers.JsonRpcProvider(URL);
@@ -127,7 +128,7 @@ const checkUser = (activeBounties, user) => {
     }
 }
 
-router.post('/', async function (req, res, next) {
+router.post('/', cors(), async function (req, res, next) {
     const USER_HASH = req.body.userhash;
     const NAME = req.body.name;
     const DESCRIPTION = req.body.description;

@@ -170,5 +170,12 @@ contract Main {
         }
         returnTempSubmissionArray();
     }
+
+      function statistics(address _address) public {
+        for (uint256 q = 0; q < bountyHashTable[_address].submissions.length; q++) {
+            tempSubmissionArray.push(bountyHashTable[_address].submissions[q]);
+        }
+        returnTempSubmissionArray();
+    }
     
 }

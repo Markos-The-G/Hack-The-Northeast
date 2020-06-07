@@ -15,9 +15,7 @@ class Dashboard extends Component {
                 <div className="dashboard-title">Dashboard</div>
                 <div className="dashboard-content-div">
                     <DashboardCard/>
-                    <DashboardCard/>
-                    <DashboardCard/>
-                    <DashboardCard/>
+       
 
                 </div>
             </div>

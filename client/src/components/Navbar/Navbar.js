@@ -30,7 +30,10 @@ function Navbar(){
         <div className="navbar-div">
             <div className="navbar-inner-div">
                 <div className="profile-div">
-                    <div className="navbar-profile-name">NAME</div>
+                    {/* <div className="navbar-profile-name">NAME</div> */}
+                    <div style={{height: "100px"}}>
+                        <img width="150" src="https://bountai-logo.adityakeerthi.repl.co/BountAI.png"></img>
+                    </div>
                 </div>
                 <div className="navlinks-holder">
                     <div className="navlinks-container">

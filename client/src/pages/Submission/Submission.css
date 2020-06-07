@@ -1,0 +1,46 @@
+.find-bounty-box1{
+    width: 300px;
+    height: fit-content;
+    background: white;
+    margin-left: 100px;
+    margin-top: 50px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    font-family: 'Work Sans', sans-serif;
+
+}
+
+.find-bounty-details-title{
+    font-size: 20px;
+    font-weight: 500;
+    margin: 10px;
+}
+
+.find-bounty-details-subtitle{
+    color: grey;
+    margin: 10px;
+}
+
+.find-bounty-details-button{
+    margin: 10px;
+}
+
+.bounty-submission-div{
+    width: 300px;
+    height: 500px;
+    background: white;
+    margin-top: 50px;
+    margin-left: 50px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.small-text{
+    font-size: 13px;
+    color: grey;
+    font-family: 'Work Sans', sans-serif;
+}

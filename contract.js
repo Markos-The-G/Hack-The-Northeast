@@ -320,6 +320,21 @@ exports.abi = [
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "statistics",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ];
-exports.address = '0xE4ab74D9c0Ca584D4708eCa91A058Fbda6994A9c';
+exports.address = '0xa3f150De117A8FCb51A57206FEf47FA5dE78cF5f';

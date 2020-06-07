@@ -100,10 +100,10 @@ class App extends Component {
                 <Dashboard/>
               </Route>
               <Route path="/analytics">
-                <Analytics/>
+                <Analytics account={this.state.account}/>
               </Route>
               <Route path="/create-bounty">
-                <CreateBounty account={this.state.account}/>
+                <CreateBounty account={this.state.account} signer={this.state.signer}/>
               </Route>
               {/* <Route path="/find-bounty/:hash" component={Submission}>
               </Route> */}

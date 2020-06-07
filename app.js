@@ -17,6 +17,7 @@ var paymentRouter = require('./routes/payment');
 var updateModelRouter = require('./routes/updateModel');
 var currentAmountRouter = require('./routes/currentAmount');
 var searchBountyRouter = require('./routes/searchBounty');
+var statisticsRouter = require('./routes/statistics')
 
 var app = express();
 
@@ -41,8 +42,9 @@ app.use('/addSubmission', addSubmissionRouter);
 app.use('/getAllBounties', getAllBountiesRouter);
 app.use('/payment', paymentRouter);
 app.use('/updateModel', updateModelRouter);
-app.use('/currentAmount', currentAmountRouter)
-app.use('/searchBounty', searchBountyRouter)
+app.use('/currentAmount', currentAmountRouter);
+app.use('/searchBounty', searchBountyRouter);
+app.use('/statistics', statisticsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
