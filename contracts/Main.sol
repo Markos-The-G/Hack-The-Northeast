@@ -9,7 +9,7 @@ contract Main {
     }
     
     //Ipfs thing
-  string storedData;
+  string storedData = "QmbJWAESqCsf4RFCqEY7jecCashj8usXiyDNfKtZCwwzGb";
 
   function set(string memory x) public {
     storedData = x;

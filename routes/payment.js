@@ -97,17 +97,19 @@ router.post('/', async function (req, res, next) {
 
         userInfo.forEach(subDoc => {
             let accuracy = subDoc.accuracy;
-            accuracy = parseInt("0x50", 16);
+            accuracy = parseInt(accuracy, 16);
 
             LIST.push( accuracy )
 
         })
+
         LIST.sort();
         console.log(LIST);
         Contract.deleteTempSubmissionArray();
 
-        if (req.body.accuracy > LIST[LIST.length - 1] && req.body.accuracy < req.body.bountyAccuracy) {
-            await partialPayment(req.body.userhash, req.body.amount, req.body.bountyAddress);
+        finalAmount = req.body.amount.toString();
+        if ((req.body.accuracy > LIST[LIST.length - 1] || LIST.length === 0) && req.body.accuracy < req.body.bountyAccuracy) {
+            await Contract.partialPayment(req.body.userhash, finalAmount, req.body.bountyAddress);
             res.send('Partial Payment');
         } else if (req.body.accuracy >= req.body.bountyAccuracy) {
             await Contract.fullPayment(req.body.userhash, req.body.bountyAddress)

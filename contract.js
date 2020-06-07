@@ -337,4 +337,4 @@ exports.abi = [
     "type": "function"
   }
 ];
-exports.address = '0xa3f150De117A8FCb51A57206FEf47FA5dE78cF5f';
+exports.address = '0xD244475d074602aBF04A69527Cb22F860aD8d277';

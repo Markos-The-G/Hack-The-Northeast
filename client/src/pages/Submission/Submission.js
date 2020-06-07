@@ -13,13 +13,16 @@ class Submission extends Component {
             data : {},
             loading : true
         }
+        this.fileInputRef = React.createRef();
     }
 
-    CONVERSION_RATE = (WEI) => { return (WEI * ((10000 / 31) / (1000000000000000000))).toFixed(2); }
+    WEI_TO_CAD = (WEI) => { return (WEI * ((10000 / 31) / (1000000000000000000))).toFixed(2); }
 
     componentDidMount(){
         var hash = decodeURI(this.props.hash)
-        console.log(hash)
+        this.setState({
+            name: hash
+        })
       
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -27,25 +30,111 @@ class Submission extends Component {
         var raw = JSON.stringify({"bountyName": hash});
         
         var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow'
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+        console.log(raw)
+        console.log(this.state)
+
+        fetch("http://localhost:3005/currentAmount", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                    console.log("OIOIO")
+                    result = (bigInt(parseInt(result, 16)));
+                    result = this.WEI_TO_CAD(result);
+
+                    this.setState({price : result})
+
+                    var myHeaders = new Headers();
+                    myHeaders.append("Content-Type", "application/json");
+                    
+                    var raw = JSON.stringify({"userhash": this.props.account ,"name": hash});
+                    
+                    var requestOptions = {
+                        method: 'POST',
+                        headers: myHeaders,
+                        body: raw,
+                        redirect: 'follow'
+                    };
+                    console.log(raw)
+                    fetch("http://localhost:3005/searchBounty", requestOptions)
+                        .then(response => response.text())
+                        .then(result => {
+                            console.log(JSON.parse(result))
+                            this.setState({
+                                data : JSON.parse(result), 
+                                loading : false
+                            })
+                        })
+                        .catch(error => console.log('error', error));
+                })
+            .catch(error => console.log('error', error));
+
+    }
+
+    openFileDialog = () => {
+        if (this.props.disabled) return;
+        this.fileInputRef.current.click();
+    }
+
+    onModelAdded = (e) => {
+        e.preventDefault();
+        const file = e.target.files[0];
+        let reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onloadend = () => {
+            this.setState({
+                bufferedModel: Buffer(reader.result)
+            })
+            console.log("Updated buffered model: ", this.state.bufferedModel);
+        }
+
+    }
+
+    CAD_TO_WEI = (CAD) => { return (CAD * (31/10000) * (1000000000000000000))}
+
+    onSubmit = (e) => {
+        console.log(this.state.bufferedModel);
+
+        //call py endpoint
+        //this will give us the result of the model
+
+        var newAccuracy = 40
+        var threshold = this.state.data.requirements.accuracy
+        var amountLeft = this.state.price + 1;
+
+        var moneyTheyGet = (newAccuracy/threshold) * amountLeft 
+        var moneyTheyGet = bigInt(parseInt(this.CAD_TO_WEI(moneyTheyGet)));
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        
+        var raw = JSON.stringify({"userhash": this.props.account});
+        
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
         };
         
-        fetch("http://localhost:3005/currentAmount", requestOptions)
-          .then(response => response.text())
-          .then(result => {
-
-                result = (bigInt(parseInt(result, 16)));
-                result = this.CONVERSION_RATE(result);
-
-                this.setState({price : result})
+        fetch("http://localhost:3005/getAllBounties", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                result = JSON.parse(result);
 
                 var myHeaders = new Headers();
                 myHeaders.append("Content-Type", "application/json");
-                
-                var raw = JSON.stringify({"userhash": this.props.account ,"name": hash});
+
+                var raw = JSON.stringify({
+                    "accuracy": newAccuracy,
+                    "bountyAccuracy": this.state.data.requirements.accuracy,
+                    "userhash": this.props.account,
+                    "bountyAddress": result[this.state.name].user,
+                    "amount": moneyTheyGet
+                });
                 
                 var requestOptions = {
                     method: 'POST',
@@ -54,18 +143,66 @@ class Submission extends Component {
                     redirect: 'follow'
                 };
                 
-                fetch("http://localhost:3005/searchBounty", requestOptions)
+                fetch("http://localhost:3005/payment", requestOptions)
                     .then(response => response.text())
                     .then(result => {
-                            console.log(JSON.parse(result))
-                            this.setState({
-                                data : JSON.parse(result), 
-                                loading : false
-                            })
-                        })
+                        console.log(result);
+
+                        if (result === "Full Payment") {
+                            var myHeaders = new Headers();
+                            myHeaders.append("Content-Type", "application/json");
+                            
+                            var raw = JSON.stringify({
+                                "title": this.state.name,
+                                "accuracy": newAccuracy,
+                                "model": this.state.bufferedModel,
+                                "status": true
+                            });
+                            
+                            var requestOptions = {
+                                method: 'POST',
+                                headers: myHeaders,
+                                body: raw,
+                                redirect: 'follow'
+                            };
+                            
+                            fetch("http://localhost:3005/updateModel", requestOptions)
+                                .then(response => response.text())
+                                .then(result => console.log(result))
+                                .catch(error => console.log('error', error));
+
+                        } else if (result === "Partial Payment") {
+                            var myHeaders = new Headers();
+                            myHeaders.append("Content-Type", "application/json");
+                            
+                            var raw = JSON.stringify({
+                                "title": this.state.name,
+                                "accuracy": newAccuracy,
+                                "model": this.state.bufferedModel,
+                                "status": false
+                            });
+                            
+                            var requestOptions = {
+                                method: 'POST',
+                                headers: myHeaders,
+                                body: raw,
+                                redirect: 'follow'
+                            };
+                            
+                            fetch("http://localhost:3005/updateModel", requestOptions)
+                                .then(response => response.text())
+                                .then(result => console.log(result))
+                                .catch(error => console.log('error', error));
+                        } else if (result === "No Payment") {
+
+                        }
+
+                    })
                     .catch(error => console.log('error', error));
             })
-          .catch(error => console.log('error', error));
+            .catch(error => console.log('error', error));
+    
+
 
     }
 
@@ -75,7 +212,9 @@ class Submission extends Component {
                 {
                     this.state.loading
                     ?
-                    <CircularProgress />
+                    <div style={{marginLeft : "120px" ,display : "flex", justifyContent : "center", alignItems : "center", flex : 1, height : "100%"}}>
+                        <CircularProgress />
+                    </div>
                     :
 
                         <div>
@@ -118,9 +257,12 @@ class Submission extends Component {
 
 
                                     <input 
-                                    type="file"
-                                    id="raised-model-filee"
-                                    style={{display : "none"}}
+                                        type="file"
+                                        id="raised-model-filee"
+                                        className="file-input"
+                                        style={{display : "none"}}
+                                        ref={this.fileInputRef}
+                                        onChange={this.onModelAdded}
                                     />
                                     <label htmlFor="raised-model-filee">
                                         <Button variant="contained" color="primary" component="span">
@@ -128,27 +270,9 @@ class Submission extends Component {
                                         </Button>
                                     </label> 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                        
                                     </div>
                                     <div style={{width: "100%", display: "flex", justifyContent : "center", marginBottom : "30px"}}>
-                                        <Button variant="contained" color="primary">
+                                        <Button onClick={this.onSubmit} variant="contained" color="primary">
                                             Submit
                                         </Button>
                                     </div>

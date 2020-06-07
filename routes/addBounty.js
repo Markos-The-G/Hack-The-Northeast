@@ -136,12 +136,13 @@ router.post('/', cors(), async function (req, res, next) {
     const BUFFER_TRAINING_DATA = req.body.trainingdata;
     const BUFFER_MODEL = req.body.model;
     const AMOUNT = req.body.amount;
+    let finalAmount = AMOUNT.toString();
     const ACTIVE_BOUNTIES = await Contract.returnBountyAddresses();
 
     const userStatus = checkUser(ACTIVE_BOUNTIES, USER_HASH);
     if (userStatus) {
         uploadRequest(USER_HASH, NAME, DESCRIPTION, REQUIREMENTS, BUFFER_TRAINING_DATA, BUFFER_MODEL).then(async HASH => {
-            await Contract.addNewBounty(USER_HASH, NAME, REQUIREMENTS.accuracy, AMOUNT);
+            await Contract.addNewBounty(USER_HASH, NAME, REQUIREMENTS.accuracy, finalAmount);
             res.send('success');
         })
     } else {

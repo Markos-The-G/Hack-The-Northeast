@@ -43,12 +43,27 @@ class DashboardCard extends Component {
                         <div className="dashboard-analytics-data">
                             25
                         </div>
-                        <div style={{height: "20px"}}></div>
+                        <div style={{height: "15px"}}></div>
                         <div className="dashboard-analytics-header-div">
                             Highest Accuracy Submitted:
                         </div>
                         <div className="dashboard-analytics-data">
                             74%
+                        </div>
+                        <div style={{height: "15px"}}></div>
+                        <div className="dashboard-analytics-header-div">
+                            Accuracy Threshold:
+                        </div>
+                        <div className="dashboard-analytics-data">
+                            90%
+                        </div>
+                    </div>
+                    <div style={{display : "flex", flex : 1, flexDirection : "column", height: "100%"}}>
+                        <div className="row-thing">
+                            <div>
+                                <div></div>   88%
+
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -40,7 +40,7 @@ const uploadFile = async (buffer) => {
     })
 }
 
-const updateModel = async (title, accuracy, bufferedModel) => {
+const updateModel = async (title, accuracy, bufferedModel, result) => {
 
 
     return new Promise( async (resolve, reject) => {
@@ -68,7 +68,8 @@ const updateModel = async (title, accuracy, bufferedModel) => {
                                 accuracy
                             },
                             trainingDataHash: MDB[uID][pTITLE].trainingDataHash,
-                            modelHash: modelHash
+                            modelHash: modelHash,
+                            paid: result
                         }
 
                     }
@@ -88,11 +89,12 @@ const updateModel = async (title, accuracy, bufferedModel) => {
 }
 
 router.post('/', async function (req, res, next) {
-    const USER_ADDRESS = req.body.title;
+    const TITLE = req.body.title;
     const ACCURACY = req.body.accuracy;
     const BUFFERED_MODEL = req.body.model;
+    const RESULT = req.body.status; // boolean
 
-    updateModel.then(HASH => {
+    updateModel(TITLE, ACCURACY, BUFFERED_MODEL, RESULT).then(HASH => {
         res.send("Updated");
     })
     

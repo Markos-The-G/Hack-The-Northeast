@@ -29,7 +29,7 @@
 
 .dashboard-analytics-div{
     width: 140px;
-    height: 300px;
+    height: 330px;
     background: #ffbb3b;
     margin-left: 10px;
     border-radius: 8px;
@@ -48,4 +48,11 @@
 .dashboard-analytics-data{
     font-size: 28px;
     margin-top: 10px;
+}
+
+.row-thing{
+    width: 80%;
+    height: 40px;
+    margin-top: 8px;
+    margin-left: 15px;
 }

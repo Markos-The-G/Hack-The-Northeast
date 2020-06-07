@@ -16,7 +16,10 @@ router.post('/', async (req, res, next) => {
     Contract.returnTempBountyArray().then( async LIST => {
         LIST.forEach(async doc => {
             if (doc.name === BOUNTY_NAME) {
+                console.log(doc.bountyAmount);
+
                 await Contract.deleteTempBountyArray();
+                
                 res.send(doc.bountyAmount["_hex"]);
             }
 

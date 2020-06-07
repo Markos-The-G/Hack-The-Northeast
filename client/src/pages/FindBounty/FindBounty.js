@@ -21,33 +21,21 @@ class FindBounty extends Component {
         var raw = JSON.stringify({"userhash":"0xF6ADe377c46f995cF8A7329610a71541590bE4B4"});
 
         var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-        redirect: 'follow'
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
         };
 
         fetch("http://localhost:3005/getAllBounties", requestOptions)
-        .then(response => response.text())
-        .then(result => {
-            this.setState({data : JSON.parse(result), loading : false})
-
-
-
-
-
-
-
-
-
-
-
-
-        })
-        .catch(error => console.log('error', error));
+            .then(response => response.text())
+            .then(result => {
+                this.setState({data : JSON.parse(result), loading : false})
+                
+            })
+            .catch(error => console.log('error', error));
     }
 
-    // yo this shit is, im fucked i got my endpoint to ework, but the goddamn gay ass buffer api isn't working,fml
     render() {  
         console.log(this.state.data)
         return (

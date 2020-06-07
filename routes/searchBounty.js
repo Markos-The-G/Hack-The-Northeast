@@ -66,6 +66,8 @@ const searchBounty = async (user, title) => {
                         name: uDOC[pTITLE].name,
                         description: uDOC[pTITLE].description,
                         requirements: uDOC[pTITLE].requirements,
+                        user: uDOC[pTITLE].user,
+                        paid: uDOC[pTITLE].paid,
                         trainingDataLink,
                         modelLink
                     }

@@ -5,6 +5,7 @@ import "./CreateBounty.css"
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { ethers, utils } from 'ethers';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 class CreateBounty extends Component {
     constructor(props) {
@@ -75,34 +76,33 @@ class CreateBounty extends Component {
     onSubmit = (e) => {
         e.preventDefault();
 
+        this.setState({loading : true})
 
-            
+        // var forms = document.getElementsByClassName("form")
+
+        // for (var i = 0; i < forms.length; i++){
+        //     console.log(forms[i])
+        //     forms[i].value = ""
+        // }
+
+
+
+
+
+
+
+
+
+
+
         let etherCost = this.CONVERSION_RATE(this.state.amount)
             
         let tx = this.props.signer.sendTransaction({
-            to: '0xa3f150De117A8FCb51A57206FEf47FA5dE78cF5f', 
+            to: '0xD244475d074602aBF04A69527Cb22F860aD8d277', 
             value: etherCost
         }).then ( (t) => {
             console.log(t);
         })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -126,13 +126,14 @@ class CreateBounty extends Component {
             redirect: 'follow'
         };
         
-        
+        this.setState({name : "", description : "", accuracy : "", amount : ""})
         fetch("http://localhost:3005/addBounty", requestOptions)
             .then(response => response.text())
             .then(result => {
                 console.log("DONE");
                 
-            
+                this.setState({loading : false})
+
   
             })
             .catch(error => console.log('error', error));
@@ -146,14 +147,14 @@ class CreateBounty extends Component {
                 </div>
                 <div className="create-bounty-content">
                     <div style={{width: "100%", display: "flex", justifyContent : "space-evenly", marginTop : "50px"}}>
-                        <TextField onChange={(e) => {this.setState({ name: e.target.value })}} id="standard-basic" label="Name" />
-                        <TextField onChange={(e) => {this.setState({ amount: e.target.value })}} id="standard-basic" label="Amount CAD" />
+                        <TextField value={this.state.name} className="form" onChange={(e) => {this.setState({ name: e.target.value })}} id="standard-basic" label="Name" />
+                        <TextField value={this.state.amount} className="form" onChange={(e) => {this.setState({ amount: e.target.value })}} id="standard-basic" label="Amount CAD" />
                     </div>
                     <div style={{width: "85%", display: "flex", justifyContent : "space-evenly", marginTop : "50px"}}>
-                        <TextField onChange={(e) => {this.setState({ description: e.target.value })}} multiline={true} fullWidth id="standard-basic" label="Description" />
+                        <TextField value={this.state.description} className="form" onChange={(e) => {this.setState({ description: e.target.value })}} multiline={true} fullWidth id="standard-basic" label="Description" />
                     </div>
                     <div style={{width: "85%", display: "flex", justifyContent : "space-evenly", marginTop : "50px"}}>
-                        <TextField onChange={(e) => {this.setState({ accuracy: e.target.value })}} multiline={true} fullWidth id="standard-basic" label="Required Accuracy %" />
+                        <TextField value={this.state.accuracy} className="form" onChange={(e) => {this.setState({ accuracy: e.target.value })}} multiline={true} fullWidth id="standard-basic" label="Required Accuracy %" />
                     </div>
 
                     <div style={{display: "flex", justifyContent : "space-evenly", width: "100%", marginTop : "30px"}}>
@@ -188,6 +189,13 @@ class CreateBounty extends Component {
                     <Button onClick={this.onSubmit} variant="contained" color="primary" style={{marginTop : "30px", marginBottom : "30px"}}>
                         Submit
                     </Button>
+                    {
+                        this.state.loading
+                        ?
+                        <CircularProgress style={{marginBottom : "20px"}}></CircularProgress>
+                        : 
+                        null
+                    }
                 </div>
             </div>
         );

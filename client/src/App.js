@@ -97,7 +97,7 @@ class App extends Component {
             <Navbar/>
             <Switch>
               <Route path="/dashboard">
-                <Dashboard/>
+                <Dashboard account={this.state.account}/>
               </Route>
               <Route path="/analytics">
                 <Analytics account={this.state.account}/>
