@@ -55,6 +55,7 @@ const uploadRequest = async (user, name, description, requirements, bufferTraini
 
             OBJ[user] = {  };
             OBJ[user][name] = {
+                user,
                 name,
                 description,
                 requirements,
@@ -79,6 +80,7 @@ const uploadRequest = async (user, name, description, requirements, bufferTraini
 
             if (MDB[user]) {
                 MDB[user][name] = {
+                    user,
                     name,
                     description,
                     requirements,
@@ -90,6 +92,7 @@ const uploadRequest = async (user, name, description, requirements, bufferTraini
             } else {
                 MDB[user] = {  };
                 MDB[user][name] = {
+                    user,
                     name,
                     description,
                     requirements,

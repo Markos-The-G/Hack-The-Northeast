@@ -12,7 +12,10 @@ var setRouter = require('./routes/set');
 var addBountyRouter = require('./routes/addBounty');
 var retrieveTempSubmissionArrayRouter = require('./routes/retrieveTempSubmissionArray');
 var addSubmissionRouter = require('./routes/addSubmission');
-
+var getAllBountiesRouter = require('./routes/getAllBounties');
+var paymentRouter = require('./routes/payment');
+var updateModelRouter = require('./routes/updateModel');
+var currentAmountRouter = require('./routes/currentAmount');
 var app = express();
 
 // view engine setup
@@ -33,6 +36,10 @@ app.use('/set', setRouter);
 app.use('/addBounty', addBountyRouter);
 app.use('/retrieveTempSubmissionArray', retrieveTempSubmissionArrayRouter);
 app.use('/addSubmission', addSubmissionRouter);
+app.use('/getAllBounties', getAllBountiesRouter);
+app.use('/payment', paymentRouter);
+app.use('/updateModel', updateModelRouter);
+app.use('/currentAmount', currentAmountRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

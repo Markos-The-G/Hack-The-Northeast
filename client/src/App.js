@@ -10,11 +10,16 @@ import FindBounty from "./pages/FindBounty/FindBounty.js"
 import Dashboard from "./pages/Dashboard/Dashboard.js"
 import Analytics from "./pages/Analytics/Analytics.js"
 import History from "./pages/History/History.js"
+import Submission from "./pages/Submission/Submission.js"
 
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 
 const theme = createMuiTheme({
+  typography: {
+    "fontFamily": "'Work Sans', sans-serif",
+ 
+   },
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
@@ -99,6 +104,8 @@ class App extends Component {
               </Route>
               <Route path="/create-bounty">
                 <CreateBounty account={this.state.account}/>
+              </Route>
+              <Route path="/find-bounty/:hash" component={Submission}>
               </Route>
               <Route path="/find-bounty">
                 <FindBounty/>

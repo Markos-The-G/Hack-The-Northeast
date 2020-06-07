@@ -20,6 +20,8 @@
 .bounty-card-details{
     font-family: 'Work Sans', sans-serif;
     color: rgb(117, 116, 110);
+    display: flex;
+    flex-direction: column;
 }
 
 .bounty-card-detail-container{

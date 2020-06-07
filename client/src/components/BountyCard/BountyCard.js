@@ -4,6 +4,8 @@ import "./BountyCard.css"
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
+import {Link} from "react-router-dom"
+
 const styles = {
     accept: {
         marginRight : "10px",
@@ -22,22 +24,21 @@ class BountyCard extends Component {
         return (
             <div className="bounty-card-div">
                 <div className="bounty-card-detail-container">
-                    <div className="bounty-card-title-div">Identify Flower Families</div>
+                        <div className="bounty-card-title-div">{this.props.title}</div>
                         <div className="bounty-card-details">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut 
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
-                            nisi ut aliquip ex ea commodo consequat.
+                            <div>{this.props.description}</div>
+                            <div>Required Accuracy: {this.props.data.requirements.accuracy}</div>
                         </div>
                         
                 </div>
                 <div className="right-panel-bounty-card">
-                    <div className="bounty-price">$2,000</div>
+                    <div className="bounty-price">{this.props.amount}</div>
                     <div style={{width: "100%", display : "flex", justifyContent : "flex-end", height: "100%", alignItems: "flex-end"}}>
-                        <div>
+                        <Link to="/find-bounty/fhaisduhfoiausdhfoiusdhfisoud" style={{textDecoration : "none", color : "black"}}>
                             <Button classes={{ root: classes.accept }} variant="contained" color="primary">
                                 View Details
                             </Button>
-                        </div>
+                        </Link>
                     </div>
                 </div>
             </div>

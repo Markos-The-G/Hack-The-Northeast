@@ -14,8 +14,6 @@ const ipfs = new IPFS ({
     protocol: 'https'
 })
 
-const router = express.Router();
-
 const get = async hash => {
     const URL = "https://gateway.ipfs.io/ipfs/" + hash;
 
@@ -44,7 +42,9 @@ const updateModel = async (title, accuracy, bufferedModel) => {
 
 
     return new Promise( async (resolve, reject) => {
-        const IPFS_HASH = await Contract.get();
+
+        // const IPFS_HASH = await Contract.get();
+        const IPFS_HASH = 'Qma2DmcFktqnrGByJkMu4PbVBFh7pGtEBfGQrAVqp7ME56';
         const MDB = await get(IPFS_HASH);
         const USERS = Object.keys(MDB);
 
@@ -80,23 +80,56 @@ const updateModel = async (title, accuracy, bufferedModel) => {
         let buffer = Buffer.from(JSON.stringify(MDB));
 
         const HASH = await uploadFile(buffer);
-        await Contract.set(HASH);
+        
         resolve(HASH);
     })
 
 
 }
 
-router.post('/', async function (req, res, next) {
-    const USER_ADDRESS = req.body.title;
-    const ACCURACY = req.body.accuracy;
-    const BUFFERED_MODEL = req.body.model;
+const router = express.Router();
 
-    updateModel.then(HASH => {
-        res.send("Updated");
+router.post('/', async function (req, res, next) {
+    const USER_ADDRESS = req.body.userhash;
+    const LIST = [  ];
+    await Contract.retrieveTempSubmissionArray(USER_ADDRESS);
+    Contract.returnTempSubmissionArray().then(async userInfo => {
+
+        userInfo.forEach(subDoc => {
+            let accuracy = subDoc.accuracy;
+            accuracy = parseInt("0x50", 16);
+
+            LIST.push( accuracy )
+
+        })
+        LIST.sort();
+        console.log(LIST);
+        Contract.deleteTempSubmissionArray();
+
+        if (req.body.accuracy > LIST[LIST.length - 1] && req.body.accuracy < req.body.bountyAccuracy) {
+            await partialPayment(req.body.userhash, req.body.amount, req.body.bountyAddress);
+            res.send('Partial Payment');
+        } else if (req.body.accuracy >= req.body.bountyAccuracy) {
+            await Contract.fullPayment(req.body.userhash, req.body.bountyAddress)
+            res.send('Full Payment');
+        } else {
+            res.send('No Payment');
+        }
+
+        
     })
-    
+
+
+    // updateModel(title, accuracy, bufferedModel)
 
 })
 
+// router.post('/test', async function (req, res, next) {
+//     await Contract.addNewBounty(req.body.address, req.body.name, req.body.requirement, req.body.amount)
+//     res.send('success');
+// })
+
+//
+
+// 1. Submitting =. 2. If the accuracy of submission is > the highest accuracy submission => Swap the models, continue the endpoint which pay x amount 3. Call add submission
 module.exports = router;

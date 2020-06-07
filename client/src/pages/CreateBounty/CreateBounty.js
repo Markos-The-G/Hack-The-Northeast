@@ -13,7 +13,9 @@ class CreateBounty extends Component {
             bufferModel: null,
             name: "",
             description: "",
-            requirements: ""
+            requirements: "",
+            amount: null,
+            accuracy: null
         }
         this.fileInputRef1 = React.createRef();
         this.fileInputRef2 = React.createRef();
@@ -67,6 +69,8 @@ class CreateBounty extends Component {
         }
     }
 
+    CONVERSION_RATE = (CAD) => { return (CAD * (31/10000) * (1000000000000000000))}
+
     onSubmit = (e) => {
         e.preventDefault();
         var myHeaders = new Headers();
@@ -74,14 +78,14 @@ class CreateBounty extends Component {
         
         var raw = JSON.stringify({
             "userhash": this.props.account,
-            "name":"Detecting COVID",
-            "description":"COVID-19 is meaniee",
+            "name": this.state.name,
+            "description": this.state.description,
             "requirements":{
-                "accuracy": 90
+                "accuracy": this.state.accuracy
             },
             "trainingdata": this.state.bufferTrainingData,
             "model": this.state.bufferModel,
-            "amount": 123
+            "amount": this.CONVERSION_RATE(this.state.amount)
         });
         
         var requestOptions = {
@@ -93,7 +97,9 @@ class CreateBounty extends Component {
         
         fetch("http://localhost:3005/addBounty", requestOptions)
             .then(response => response.text())
-            .then(result => console.log(result))
+            .then(result => {
+                console.log("DONE");
+            })
             .catch(error => console.log('error', error));
     }
 
@@ -105,14 +111,14 @@ class CreateBounty extends Component {
                 </div>
                 <div className="create-bounty-content">
                     <div style={{width: "100%", display: "flex", justifyContent : "space-evenly", marginTop : "50px"}}>
-                        <TextField id="standard-basic" label="Name" />
-                        <TextField id="standard-basic" label="Amount" />
+                        <TextField onChange={(e) => {this.setState({ name: e.target.value })}} id="standard-basic" label="Name" />
+                        <TextField onChange={(e) => {this.setState({ amount: e.target.value })}} id="standard-basic" label="Amount CAD" />
                     </div>
                     <div style={{width: "85%", display: "flex", justifyContent : "space-evenly", marginTop : "50px"}}>
-                        <TextField multiline={true} fullWidth id="standard-basic" label="Description" />
+                        <TextField onChange={(e) => {this.setState({ description: e.target.value })}} multiline={true} fullWidth id="standard-basic" label="Description" />
                     </div>
                     <div style={{width: "85%", display: "flex", justifyContent : "space-evenly", marginTop : "50px"}}>
-                        <TextField multiline={true} fullWidth id="standard-basic" label="Requirements" />
+                        <TextField onChange={(e) => {this.setState({ accuracy: e.target.value })}} multiline={true} fullWidth id="standard-basic" label="Required Accuracy %" />
                     </div>
 
                     <div style={{display: "flex", justifyContent : "space-evenly", width: "100%", marginTop : "30px"}}>
